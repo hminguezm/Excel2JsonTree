@@ -41,7 +41,9 @@ type MenuInfo struct {
 
 **Step1 : Get variable holder Pointer:**
       
+```
 variableHolderObjPtr := xlsToJson.GetVariableHolderPtr()
+```
 variableHolderObjPtr can be used to invoke package built in functions.
 
 **Step2 : Set name of column(s) to be refered for generating json:**
@@ -253,12 +255,12 @@ arg3: struct key in which children nodes would be appended.
 #### Built-in functions:
 1. GetVariableHolderPtr() : 
 
-  Returns the VariableHolder instance pointer that can be used to Invoke built in package   function.
+     Returns the VariableHolder instance pointer that can be used to Invoke built in package   function.
 
 2. SetNodesColumnNameMap(list []string):
 
 
-  Accepts the list of columns name that specifies the level of nodes in excel.
+     Accepts the list of columns name that specifies the level of nodes in excel.
 
 3. SetAttributeMappingMap(structXslMap map[string]string):
 
