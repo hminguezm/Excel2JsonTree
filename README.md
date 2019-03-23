@@ -1,6 +1,6 @@
 # Excel2JsonTree
 
- Excel2JsonTree is basically written to easily convert the excel data to json object with dynamic struct binding. It also solves the main problem of converting the excel to nested json object by simplify passing struct.
+ Excel2JsonTree is basically written to easily convert the excel data to json object with dynamic struct binding. It also solves the main problem of converting the excel to nested json object by simply passing struct.
 
 #### Features:
 
