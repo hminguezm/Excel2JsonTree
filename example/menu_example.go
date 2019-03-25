@@ -48,15 +48,6 @@ func main() {
 	// AttributeMappingMap : key - excel header and value - struct keys
 	// set inputs and functions to be performed during json generation  (optional)
 	
-	// ParentName  		string     `json:"parentName"`
-	// DisplayName 		string     `json:"displayName"`-
-	// MenuDescription     string     `json:"menuDescription"`
-	// Ordinal     		string     `json:"ordinal"`-
-	// ValidTill   		time.Time  `json:"validTill"`.-
-	// RoleList    		[]string   `json:"roleList"`.
-	// HasChild    		bool       `json:"hasChild"`.
-	// MenuList   			[]MenuInfo `json:"menuList"`.
-	// OptionLevel       	int        `json:"optionLevel"`..
 	
 	
 	
@@ -100,17 +91,12 @@ func main() {
 	if err != nil {
 		log.Fatal("ConvertXslToJSON : error in converting excel to json : ", err)
 	}
-	// logginghelper.LogDebug("Main ends", end)
+	
 	a := jsonTree.(MenuInfo)
 	b, _ := json.Marshal(a.MenuList)
 	fmt.Println("Json:")
 	fmt.Println(string(b))
-	// err = dalhelper.SaveDataToFDB("./menu.json", b, true)
-	// if err != nil {
-	// 	log.Fatal("error in saving json : ", err)
-	// }
-	// logginghelper.LogDebug("Main ends", time.Since(start))
-
+	
 }
 
 // sample functions
