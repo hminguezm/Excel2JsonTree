@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"time"
-	"xlsToJson"
+	"github.com/onkarvhanumante/Excel2JsonTree"
 	"fmt"
 	"errors"
 )
@@ -34,7 +34,7 @@ func main() {
 	if len(excelFile.Sheets) == 0 {
 		log.Fatal("main : excel has no sheet")
 	}
-	fmt.Println("", excelFile.Sheets[0].Rows[0].Cells)
+
 	// s1 : get variable holder pointer
 	variableHolderObjPtr := xlsToJson.GetVariableHolderPtr()
 
@@ -48,10 +48,6 @@ func main() {
 	// AttributeMappingMap : key - excel header and value - struct keys
 	// set inputs and functions to be performed during json generation  (optional)
 	
-	
-	
-	
-	
 	structXslMap := make(map[string]string)
 	structXslMap["level"] = "DisplayName"
 	structXslMap["description"] = "MenuDescription"
@@ -61,8 +57,8 @@ func main() {
 	structXslMap["createrID"] = "CreatedBy"
 
 	// SetInputParametersToUserDefinedFunc - takes two arguements
-	// arg1 : 
-	// arg2 : function to be performed
+	// arg1 : key name to access
+	// arg2 : value
 	
 	IdDatabase := make(map[string]string)
 	IdDatabase["1"] = "user1"
