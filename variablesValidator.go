@@ -36,3 +36,13 @@ func (v *VariableHolder) checkHeaderRowColumnWithMaps() error {
 	}
 	return nil
 }
+
+// isExcelTagKeyPresentInExcelHeaderRow -  checks whether excelTagKey received is in excel header row
+func (v *VariableHolder) isExcelTagKeyPresentInExcelHeaderRow(excelTagKey string) bool {
+	for _, cell := range v.excelHeaderRow.Cells {
+		if cell.String() == excelTagKey {
+			return true
+		}
+	}
+	return false
+}
