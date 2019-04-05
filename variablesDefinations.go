@@ -79,4 +79,7 @@ const (
 	APPEND_NODE_AT_NEXT_LEVEL     = "APPEND_NODE_AT_NEXT_LEVEL"
 	APPEND_NODE_AT_PREVIOUS_LEVEL = "APPEND_NODE_AT_PREVIOUS_LEVEL"
 	APPEND_NODE_AT_SAME_LEVEL     = "APPEND_NODE_AT_SAME_LEVEL"
+
+	// EXCEL_TAG - tag to be used while mapping excel column key with struct key
+	EXCEL_TAG = "excel"
 )
