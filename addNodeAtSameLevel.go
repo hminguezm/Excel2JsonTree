@@ -20,11 +20,13 @@ func (v *VariableHolder) recursivelyAddNodeTSLV1(parentNode, childNode reflect.V
 				parentChildrenList.Set(reflect.Append(parentChildrenList, childNode))
 			} else {
 				if parentChildrenList.Len() == 0 {
-					node := reflect.New(v.childrenArrayEntryType)
+					/* node := reflect.New(v.childrenArrayEntryType)
 					nodeChildrenList := node.FieldByName(v.childrenArrayKey)
 					updatedNode = deReferenceNode(updatedNode)
 					nodeChildrenList.Set(reflect.Append(nodeChildrenList, updatedNode))
-					parentChildrenList = nodeChildrenList
+					parentChildrenList = nodeChildrenList*/
+					updatedNode = deReferenceNode(updatedNode)
+					parentChildrenList.Set(reflect.Append(parentChildrenList, updatedNode))
 				} else {
 					updatedNode = deReferenceNode(updatedNode)
 					parentChildrenList.Index(parentChildrenList.Len() - 1).Set(updatedNode)
