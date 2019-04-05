@@ -26,18 +26,19 @@
 **struct:**
 ```
 type MenuInfo struct {
-	ParentName  		string     `json:"parentName"`
-	DisplayName 		string     `json:"displayName"`
-	MenuDescription     string     `json:"menuDescription"`
-	Ordinal     		string     `json:"ordinal"`
-	ValidTill   		time.Time  `json:"validTill"`
-	RoleList    		[]string   `json:"roleList"`
-	HasChild    		bool       `json:"hasChild"`
-	MenuList   			[]MenuInfo `json:"menuList"`
-	OptionLevel       	int        `json:"optionLevel"`
-	CreatedBy			string	   `json:"createdBy"`
+	ParentName  string     `json:"parentName"`
+	DisplayName string     `json:"displayName" excel:"level"`
+	MenuType    string     `json:"menuType" excel:"menuType"`
+	Menu        string     `json:"menu" excel:"menu"`
+	Ordinal     string     `json:"ordinal" excel:"ordinal"`
+	ValidTill   time.Time  `json:"validTill" excel:"ValidTill"`
+	RoleList    []string   `json:"roleList" excel:"RoleList"`
+	HasChild    bool       `json:"hasChild"`
+	MenuList    []MenuInfo `json:"menuList"`
+	Level       int        `json:"level"`
 }
 ```
+define struct with excel tag to map struct key excel column name
 
 **Step1 : Get variable holder Pointer:**
       
@@ -53,27 +54,8 @@ variableHolderObjPtr.SetNodesColumnNameMap([]string{"level"})
 ```
     
   SetNodesColumnNameMap accepts the list of columns name that specifies the level of nodes in excel. In above screenshot **level** is column name that specifies the level of nodes.
-  
-  **Step3: Map excel header column with struct keys:**
-  
-  Set header column cell value as map key and struct key as map value.
-  
-```	
-    structXslMap := make(map[string]string)
-	structXslMap["level"] = "DisplayName"
-	structXslMap["description"] = "MenuDescription"
-	structXslMap["ordinal"] = "Ordinal"
-	structXslMap["validTill"] = "ValidTill"
-	structXslMap["roleList"] = "RoleList"
-	structXslMap["createrID"] = "CreatedBy"
-```
-Pass the structXslMap to SetAttributeMappingMap.
 
-```
-variableHolderObjPtr.SetAttributeMappingMap(structXslMap)
-```
-
-**Step4: Map the struct key with functions that would process corresponding excel cell value:** 
+**Step3: Map the struct key with functions that would process corresponding excel cell value:** 
 	
    This steps is optional may depend on what to be implemented.
    
