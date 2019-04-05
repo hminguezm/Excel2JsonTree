@@ -9,7 +9,7 @@ import (
 // recursivelyAddNodeTNLV1 - adds child node to last parent with no child
 // called from AddNodeToNextLevel
 func (v *VariableHolder) recursivelyAddNodeTNLV1(parentNode, childNode reflect.Value) reflect.Value {
-	lastNode := reflect.New(v.childrenArrayEntryType)	
+	lastNode := reflect.New(v.childrenArrayEntryType)
 	parentChildrenList := parentNode.FieldByName(v.childrenArrayKey)
 	if parentChildrenList.Len() == 0 {
 		parentNode = v.appendChildNode(parentNode, childNode)
@@ -17,10 +17,12 @@ func (v *VariableHolder) recursivelyAddNodeTNLV1(parentNode, childNode reflect.V
 		lastNode = v.recursivelyAddNodeTNLV1(v.getLastNodeFromChildrenListOfNode(parentNode), childNode)
 		lastNodeChildrenList := lastNode.FieldByName(v.childrenArrayKey)
 		if lastNodeChildrenList.Len() == 0 {
-			node := reflect.New(v.childrenArrayEntryType)
+			/* 	node := reflect.New(v.childrenArrayEntryType)
 			nodeChildrenList := node.FieldByName(v.childrenArrayKey)
 			nodeChildrenList.Set(reflect.Append(nodeChildrenList, lastNode))
-			parentChildrenList = nodeChildrenList
+			parentChildrenList = nodeChildrenList */
+			lastNode = deReferenceNode(lastNode)
+			parentChildrenList.Set(reflect.Append(parentChildrenList, lastNode))
 		} else {
 			parentChildrenList.Index(parentChildrenList.Len() - 1).Set(lastNode)
 		}
