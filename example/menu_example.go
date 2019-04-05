@@ -2,30 +2,31 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
+
+	"corelab.mkcl.org/MKCLOS/coredevelopmentplatform/coreospackage/logginghelper"
 	"github.com/onkarvhanumante/Excel2JsonTree"
-	"fmt"
-	"errors"
 )
 
 type MenuInfo struct {
-	ParentName  		string     `json:"parentName"`
-	DisplayName 		string     `json:"displayName"`
-	MenuDescription     string     `json:"menuDescription"`
-	Ordinal     		string     `json:"ordinal"`
-	ValidTill   		time.Time  `json:"validTill"`
-	RoleList    		[]string   `json:"roleList"`
-	HasChild    		bool       `json:"hasChild"`
-	MenuList   			[]MenuInfo `json:"menuList"`
-	OptionLevel       	int        `json:"optionLevel"`
-	CreatedBy			string	   `json:"createdBy"`
+	ParentName  string     `json:"parentName"`
+	DisplayName string     `json:"displayName" excel:"level"`
+	MenuType    string     `json:"menuType" excel:"menuType"`
+	Menu        string     `json:"menu" excel:"menu"`
+	Ordinal     string     `json:"ordinal" excel:"ordinal"`
+	ValidTill   time.Time  `json:"validTill" excel:"ValidTill"`
+	RoleList    []string   `json:"roleList" excel:"RoleList"`
+	HasChild    bool       `json:"hasChild"`
+	MenuList    []MenuInfo `json:"menuList"`
+	Level       int        `json:"level"`
 }
 
 func main() {
 
 	// read excel
-	excelFile, err := xlsToJson.ReadExcel("./Menu.xlsx")
+	excelFile, err := xlsToJson.ReadExcel("C:/Users/onkarh/Desktop/xls/Menu.xlsx")
 	if err != nil {
 		log.Fatal("error in reading excel : ", err)
 	}
@@ -45,38 +46,15 @@ func main() {
 	}
 
 	// s3 : set AttributeMappingMap
-	// AttributeMappingMap : key - excel header and value - struct keys
-	// set inputs and functions to be performed during json generation  (optional)
-	
-	structXslMap := make(map[string]string)
-	structXslMap["level"] = "DisplayName"
-	structXslMap["description"] = "MenuDescription"
-	structXslMap["ordinal"] = "Ordinal"
-	structXslMap["validTill"] = "ValidTill"
-	structXslMap["roleList"] = "RoleList"
-	structXslMap["createrID"] = "CreatedBy"
-
+	// (optional)
 	// SetInputParametersToUserDefinedFunc - takes two arguements
-	// arg1 : key name to access
-	// arg2 : value
-	
-	IdDatabase := make(map[string]string)
-	IdDatabase["1"] = "user1"
-	IdDatabase["2"] = "user2"
-	variableHolderObjPtr.SetInputParametersToUserDefinedFunc("IdDatabase", IdDatabase)
-	
-	// SetKeyFunctionMap - takes two arguements
 	// arg1 : struct key name
-	// arg2 : function to be performed	
+	// arg2 : function to be performed
+
 	variableHolderObjPtr.SetKeyFunctionMap("ValidTill", generateValidTillAttributeValue)
-	variableHolderObjPtr.SetKeyFunctionMap("ParentName", assignParentName)
+	variableHolderObjPtr.SetKeyFunctionMap("Level", generateLevel)
+	variableHolderObjPtr.SetKeyFunctionMap("ParentName", generateParentName)
 	variableHolderObjPtr.SetKeyFunctionMap("HasChild", assignCurrentNodeChildStatus)
-	variableHolderObjPtr.SetKeyFunctionMap("CreatedBy", assignCreatedBy)
-	variableHolderObjPtr.SetKeyFunctionMap("OptionLevel", assignOptionLevel)
-	err = variableHolderObjPtr.SetAttributeMappingMap(structXslMap)
-	if err != nil {
-		log.Fatal("main : error in setting SetAttributeMappingMap : ", err)
-	}
 
 	// s4: generate json
 	// takes three arguements
@@ -87,12 +65,12 @@ func main() {
 	if err != nil {
 		log.Fatal("ConvertXslToJSON : error in converting excel to json : ", err)
 	}
-	
+
 	a := jsonTree.(MenuInfo)
 	b, _ := json.Marshal(a.MenuList)
 	fmt.Println("Json:")
 	fmt.Println(string(b))
-	
+
 }
 
 // sample functions
@@ -103,21 +81,23 @@ func main() {
 
 var generateValidTillAttributeValue xlsToJson.UserDefinedFunction = func(inputMap map[string]interface{}, excelCellValue string, v *xlsToJson.VariableHolder) (interface{}, error) {
 	var output interface{}
-	parsedDate, err := time.Parse("02/01/2006", excelCellValue)
+	parsedDate, err := time.Parse("01-02-06", excelCellValue)
 	if err != nil {
+		logginghelper.LogError("generateValidTillAttributeValue : error in parsing date : ", err)
 		return output, err
 	}
+
 	output = parsedDate
 	return output, nil
 }
 
-var assignOptionLevel xlsToJson.UserDefinedFunction = func(inputMap map[string]interface{}, excelCellValue string, v *xlsToJson.VariableHolder) (interface{}, error) {
+var generateLevel xlsToJson.UserDefinedFunction = func(inputMap map[string]interface{}, excelCellValue string, v *xlsToJson.VariableHolder) (interface{}, error) {
 	var output interface{}
 	output = v.GetCurrentNodeLevel()
 	return output, nil
 }
 
-var assignParentName xlsToJson.UserDefinedFunction = func(inputMap map[string]interface{}, excelCellValue string, v *xlsToJson.VariableHolder) (interface{}, error) {
+var generateParentName xlsToJson.UserDefinedFunction = func(inputMap map[string]interface{}, excelCellValue string, v *xlsToJson.VariableHolder) (interface{}, error) {
 	var output interface{}
 	parent := v.GetParentNodeForChild()
 	if parent != nil {
@@ -133,17 +113,5 @@ var assignParentName xlsToJson.UserDefinedFunction = func(inputMap map[string]in
 var assignCurrentNodeChildStatus xlsToJson.UserDefinedFunction = func(inputMap map[string]interface{}, excelCellValue string, v *xlsToJson.VariableHolder) (interface{}, error) {
 	var output interface{}
 	output = v.GetCurrentNodeChildrenStatus()
-	return output, nil
-}
-
-var assignCreatedBy xlsToJson.UserDefinedFunction = func(inputMap map[string]interface{}, excelCellValue string, v *xlsToJson.VariableHolder) (interface{}, error) {
-	var output interface{}
-	idDb := inputMap["IdDatabase"].(map[string]string)
-	val, ok := idDb[excelCellValue]
-	if ok {
-		output = val
-	} else {
-		return nil, errors.New("Id not present in db")
-	}
 	return output, nil
 }
