@@ -100,7 +100,7 @@ arg2: excel cell value to be processed.
 
 arg3: variable holder instance to call built in public methods - ***GetCurrentNodeLevel(), GetParentNodeForChild(), GetCurrentNode(), GetCurrentNodeChildStatus()*** etc.
 
-**Step5: Assign excel data to struct:**
+**Step4: Assign excel data to struct:**
 
 ```
 Val, _ := variableHolderObjPtr.ConvertXslToJSON(excelFile.Sheets[0], MenuInfo{}, "MenuList")
