@@ -26,7 +26,7 @@ type MenuInfo struct {
 func main() {
 
 	// read excel
-	excelFile, err := xlsToJson.ReadExcel("C:/Users/onkarh/Desktop/xls/Menu.xlsx")
+	excelFile, err := xlsToJson.ReadExcel("./Menu.xlsx")
 	if err != nil {
 		log.Fatal("error in reading excel : ", err)
 	}
