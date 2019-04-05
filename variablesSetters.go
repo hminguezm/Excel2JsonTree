@@ -36,8 +36,17 @@ func (v *VariableHolder) setStructInfoToGenerateTree(referenceStruct interface{}
 	val := reflect.Indirect(reflect.ValueOf(referenceStruct))
 
 	// maintain map of referenceStruct key as map key and referenceStruct key's value as map value
+	// maintain map of excel header column key with reference struct key
 	for i := 0; i < t.NumField(); i++ {
-		v.structKeyValueMap[val.Type().Field(i).Name] = val.Type().Field(i).Type
+
+		excelTag := val.Type().Field(i).Tag.Get(EXCEL_TAG)
+		structKeyType := val.Type().Field(i).Type
+		structKeyName := val.Type().Field(i).Name
+
+		v.structKeyValueMap[structKeyName] = structKeyType
+		if len(excelTag) != 0 && v.isExcelTagKeyPresentInExcelHeaderRow(excelTag) {
+			v.attributeMappingMap[excelTag] = structKeyName
+		}
 	}
 
 	// set type of elements to be appended in children slice
@@ -48,14 +57,14 @@ func (v *VariableHolder) setStructInfoToGenerateTree(referenceStruct interface{}
 // setChildrenArrayEntryType - used to set childrenArrayEntryType
 func (v *VariableHolder) setChildrenArrayEntryType(entryType reflect.Type) {
 	v.childrenArrayEntryType = entryType
-	// childrenArrayEntryType = entryType
 }
 
+// not in use
 // SetAttributeMappingMap - sets the data in attributeMappingMap
 // structXslMap - key :  excel column name, value - struct key name
 // sends error if map received is empty
 // sends error if key received in maps are also present in nodeColumnNameMap
-func (v *VariableHolder) SetAttributeMappingMap(structXslMap map[string]string) error {
+/* func (v *VariableHolder) setAttributeMappingMap(structXslMap map[string]string) error {
 
 	// check if map received is empty
 	structXslMapKeys := reflect.ValueOf(structXslMap).MapKeys()
@@ -78,6 +87,7 @@ func (v *VariableHolder) SetAttributeMappingMap(structXslMap map[string]string) 
 	v.attributeMappingMap = structXslMap
 	return nil
 }
+*/
 
 // SetInputParametersToUserDefinedFunc - sets the input  in  methodsInputParameterMap that can be used in user defined function
 func (v *VariableHolder) SetInputParametersToUserDefinedFunc(key string, value interface{}) {
