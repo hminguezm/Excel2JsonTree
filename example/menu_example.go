@@ -6,7 +6,6 @@ import (
 	"log"
 	"time"
 
-	"corelab.mkcl.org/MKCLOS/coredevelopmentplatform/coreospackage/logginghelper"
 	"github.com/onkarvhanumante/Excel2JsonTree"
 )
 
@@ -83,7 +82,6 @@ var generateValidTillAttributeValue xlsToJson.UserDefinedFunction = func(inputMa
 	var output interface{}
 	parsedDate, err := time.Parse("01-02-06", excelCellValue)
 	if err != nil {
-		logginghelper.LogError("generateValidTillAttributeValue : error in parsing date : ", err)
 		return output, err
 	}
 
