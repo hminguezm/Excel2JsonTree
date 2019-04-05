@@ -8,7 +8,9 @@ import (
 
 // getChildNodeValueTypeAndStructKeyForAssigningExcelData - returns the value type for the corresponding cell index and struct key
 func (v *VariableHolder) getChildNodeValueTypeAndStructKeyForAssigningExcelData(cellIndex int) (reflect.Type, string) {
-	return v.structKeyValueMap[v.attributeMappingMap[v.excelHeaderRow.Cells[cellIndex].String()]], v.attributeMappingMap[v.excelHeaderRow.Cells[cellIndex].String()]
+	attributeMapValue := v.attributeMappingMap[v.excelHeaderRow.Cells[cellIndex].String()]
+	// return v.structKeyValueMap[v.attributeMappingMap[v.excelHeaderRow.Cells[cellIndex].String()]], v.attributeMappingMap[v.excelHeaderRow.Cells[cellIndex].String()]
+	return v.structKeyValueMap[attributeMapValue], v.attributeMappingMap[v.excelHeaderRow.Cells[cellIndex].String()]
 }
 
 // getChildNodeValueTypeAndStructKeyForAssigningDataFromUserDefinedFunction - returns the value type for the corresponding cell index and struct key
