@@ -38,7 +38,7 @@ type MenuInfo struct {
 	Level       int        `json:"level"`
 }
 ```
-define struct with excel tag to map struct key excel column name
+**define struct with excel tag to map struct key excel column name**
 
 **Step1 : Get variable holder Pointer:**
       
