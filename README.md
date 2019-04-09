@@ -284,7 +284,8 @@ arg3: struct key in which children nodes would be appended.
 12. GetCurrentNodeChildrenStatus():
 
     Return status whether current node has child or not.
-
+# Dependencies:
+  XLSX - for excel parsing https://github.com/tealeg/xlsx
 # Contributors:
 
 **Onkar Hanumante** : www.linkedin.com/in/onkar-hanumante
