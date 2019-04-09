@@ -241,12 +241,11 @@ arg3: struct key in which children nodes would be appended.
 
 2. SetNodesColumnNameMap(list []string):
 
-
      Accepts the list of columns name that specifies the level of nodes in excel.
 
- ~~3. SetAttributeMappingMap(structXslMap map[string]string): ~~
+ 3. SetAttributeMappingMap(structXslMap map[string]string): 
 
-   ~~Accepts map that maps the excel header row with struct key. ~~
+   Accepts map that maps the excel header row with struct key.
 
 4. SetKeyFunctionMap(structKey string, functionVariable UserDefinedFunction):
       Maps the struct key with the function of type UserDefinedFunction
